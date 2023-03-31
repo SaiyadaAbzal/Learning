@@ -1,0 +1,169 @@
+package SFUserMenuDropDown;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class TC6 {
+
+	static WebDriver driver;
+	
+	public static void main(String[] args) throws InterruptedException {
+		login();
+		UserMenu();
+		MyProfile();
+		AboutOption();
+		PostLink();
+		FileLink();
+		Photo();
+	}
+	public static void login() {
+		
+		WebDriverManager.chromedriver().setup();
+		
+		driver = new ChromeDriver();
+		driver.get("https://login.salesforce.com/");
+		driver.manage().window().maximize();
+		
+		WebElement Username = driver.findElement(By.id("username"));
+		Username.sendKeys("saiyada@tekarch.com");
+		WebElement Password = driver.findElement(By.id("password"));
+		Password.sendKeys("Rahamath@1991");
+		WebElement Login = driver.findElement(By.id("Login"));
+		Login.click();
+			
+	}
+	
+	public static void UserMenu() {
+		WebElement usermenu = driver.findElement(By.id("userNavLabel"));
+		usermenu.click();
+		
+	}
+		
+	public static void MyProfile() throws InterruptedException {
+		WebElement myprofile = driver.findElement(By.xpath("//a[text()='My Profile']"));
+		myprofile.click();
+		
+		Thread.sleep(5000);
+
+		
+		WebElement Before = driver.findElement(By.id("tailBreadcrumbNode"));
+		System.out.println("Before "+Before.getText());
+
+		Thread.sleep(5000);
+
+		WebElement Edit = driver.findElement(By.xpath("//a[@class='contactInfoLaunch editLink']"));
+		//waitforvisibility(20,Edit);
+		Edit.click();
+	}
+	public static void AboutOption()throws InterruptedException  {
+		
+
+		WebElement iFrame = driver.findElement(By.id("contactInfoContentId"));
+		driver.switchTo().frame(iFrame);
+			
+		WebElement About = driver.findElement(By.xpath("//a[contains(text(),'About')]"));
+		//waitforvisibility(20,About);
+		About.click();
+		
+		WebElement Lastname = driver.findElement(By.id("lastName"));
+		Lastname.clear();
+		Lastname.sendKeys("Jamal");
+		
+		WebElement SaveButton = driver.findElement(By.xpath("//input[@value='Save All']"));
+		SaveButton.click();
+		
+		WebElement updated = driver.findElement(By.id("tailBreadcrumbNode"));
+		//waitforvisibility(20,Edit);
+		System.out.println("Updated "+updated.getText());
+		
+		
+	}
+	
+	public static void PostLink() throws InterruptedException {
+		Thread.sleep(5000);
+		WebElement Post = driver.findElement(By.xpath("//span[text()='Post']"));
+		Post.click();
+		
+		Thread.sleep(5000);
+		
+		WebElement iFrame1 = driver.findElement(By.xpath("//iframe[@allowtransparency='true']"));
+		driver.switchTo().frame(iFrame1);
+		
+		WebElement TextArea = driver.findElement(By.xpath("html/body[contains(text(),'Share')]"));
+		TextArea.click();
+		TextArea.sendKeys("My First Post through Automation");
+		
+		driver. switchTo(). defaultContent();
+		
+		Thread.sleep(5000);
+
+		WebElement shareButton = driver.findElement(By.xpath("//*[@id=\"publishersharebutton\"]"));
+		shareButton.click();
+	}
+	
+	public static void FileLink() throws InterruptedException {
+		Thread.sleep(5000);
+		WebElement File = driver.findElement(By.xpath("//span[text()='File']"));
+		File.click();
+		
+		WebElement UpLoadFile = driver.findElement(By.id("chatterUploadFileAction"));
+		UpLoadFile.click();
+
+		Thread.sleep(5000);
+
+		WebElement ChooseFile = driver.findElement(By.id("chatterFile"));
+		ChooseFile.sendKeys("C:\\TekArchTraining\\Campaign 1.docx");
+
+		Thread.sleep(5000);
+		
+		WebElement ShareBtn = driver.findElement(By.id("publishersharebutton"));
+		ShareBtn.click();
+		
+	}
+	
+	public static void Photo() throws InterruptedException {
+		
+		Thread.sleep(5000);
+		
+		WebElement photoLink = driver.findElement(By.xpath("//a[@id='uploadLink']"));
+		Actions link =new Actions(driver);
+		link.moveToElement(photoLink).build().perform();
+		photoLink.click();
+		
+		WebElement iFrame2 = driver.findElement(By.xpath("//iframe[@id='uploadPhotoContentId']"));
+		driver.switchTo().frame(iFrame2);
+		
+		WebElement ChoosePhoto = driver.findElement(By.id("j_id0:uploadFileForm:uploadInputFile"));
+		ChoosePhoto.sendKeys("C:\\TekArchTraining\\Wonder.jpeg");
+	
+		WebElement SaveBttn = driver.findElement(By.id("j_id0:uploadFileForm:uploadBtn"));
+		SaveBttn.click();
+		
+		Thread.sleep(5000);
+			
+		
+		WebElement cropper = driver.findElement(By.xpath("//div[@class='imgCrop_handle imgCrop_handleSE']"));
+		Actions Crop =new Actions(driver);
+		Crop.clickAndHold(cropper).moveByOffset(30,50).build().perform();
+		
+		WebElement cropper2 = driver.findElement(By.xpath("//div[@class='imgCrop_handle imgCrop_handleNE']"));
+		Actions Crop2 =new Actions(driver);
+		Crop2.clickAndHold(cropper2).moveByOffset(30,50).build().perform();
+		
+		WebElement SaveImg = driver.findElement(By.id("j_id0:j_id7:save"));
+		SaveImg.click();
+	}
+	
+	
+	
+	/*public static void waitforvisibility(int time,WebElement element) {
+		WebDriverWait wait = new WebDriverWait(driver, time);
+		wait.until(ExpectedConditions.visibilityOf(element));
+	}*/
+	
+
+}
